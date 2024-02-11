@@ -14,6 +14,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { SignupValidation } from "@/lib/validation";
+import { Loader } from "lucide-react";
 
 const SignupForm = () => {
   const isLoading = true;
@@ -104,7 +105,9 @@ const SignupForm = () => {
           />
           <Button className="shad-button_primary" type="submit">
             {isLoading ? (
-              <div className="flex-center gap-2">Loading ...</div>
+              <div className="flex-center gap-2">
+                <Loader /> Loading ...
+              </div>
             ) : (
               "Sign up"
             )}
