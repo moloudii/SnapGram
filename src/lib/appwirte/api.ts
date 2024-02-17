@@ -3,11 +3,6 @@ import { ID, Query } from "appwrite";
 import { account, appwriteConfig, avatars, databases } from "./config";
 import { INewUser } from "../types";
 
-const test = async () => {
-  return await ID.unique;
-};
-console.log(test());
-
 export async function createUserAccount(user: INewUser) {
   try {
     const newAccount = await account.create(
