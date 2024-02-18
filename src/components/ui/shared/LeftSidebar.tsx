@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useUserContext } from "@/context/AuthContext";
 import { sidebarLinks } from "@/constants";
 import { INavLink } from "@/lib/types";
+import { Button } from "../button";
 
 const LeftSidebar = () => {
   const { mutate: signOut, isSuccess } = useSignOutAccount();
@@ -65,6 +66,14 @@ const LeftSidebar = () => {
           })}
         </ul>
       </div>
+      <Button
+        variant="ghost"
+        className="shad-button_ghost"
+        onClick={() => signOut()}
+      >
+        <img src="/assets/icons/logout.svg" alt="logo" />
+        <p className="small-medium lg:base-medium">Logout</p>
+      </Button>
     </nav>
   );
 };
