@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useUserContext } from "@/context/AuthContext";
 import { sidebarLinks } from "@/constants";
 import { INavLink } from "@/lib/types";
-import { Button } from "../button";
+import { Button } from "../ui/button";
 
 const LeftSidebar = () => {
   const { mutate: signOut, isSuccess } = useSignOutAccount();
