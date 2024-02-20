@@ -5,34 +5,51 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "../ui/textarea";
 import FileUploader from "../shared/FileUploader";
-const formSchema = z.object({
-  username: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
-  }),
-});
-const PostForm = ({ post }) => {
-  // 1. Define your form.
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+import { PostValidation } from "@/lib/validation";
+import { Models } from "appwrite";
+import { useCreatePost } from "@/lib/react-query/queriesAndMutations";
+import { useUserContext } from "@/context/AuthContext";
+import { useToast } from "../ui/use-toast";
+
+type PostFormProps = {
+  post?: Models.Document;
+};
+
+const PostForm = ({ post }: PostFormProps) => {
+  const { mutateAsync: createPost, isPending: isLoadingCreate } =
+    useCreatePost();
+  const { user } = useUserContext();
+  const { toast } = useToast();
+  const navigate = useNavigate();
+  const form = useForm<z.infer<typeof PostValidation>>({
+    resolver: zodResolver(PostValidation),
     defaultValues: {
-      username: "",
+      caption: post ? post?.caption : "",
+      file: [],
+      location: post ? post?.location : "",
+      tags: post ? post.tags.join(",") : "",
     },
   });
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof PostValidation>) {
+    const newPost = await createPost({
+      ...values,
+      userId: user.id,
+    });
+    if (!newPost) {
+      toast({ title: "Please try again" });
+    }
+    navigate("/");
   }
 
   return (
@@ -82,7 +99,7 @@ const PostForm = ({ post }) => {
             <FormItem>
               <FormLabel className="shad-form_label">Add Location</FormLabel>
               <FormControl>
-                <Input type="text" className="shad-input" />
+                <Input type="text" className="shad-input" {...field} />
               </FormControl>
               <FormMessage className="shad-from_message" />
             </FormItem>
@@ -101,6 +118,7 @@ const PostForm = ({ post }) => {
                   type="text"
                   className="shad-input"
                   placeholder="JS, React, NEXTJs"
+                  {...field}
                 />
               </FormControl>
               <FormMessage className="shad-from_message" />
