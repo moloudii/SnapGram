@@ -214,7 +214,7 @@ export async function deleteSavedPost(savedRecordId: string) {
   try {
     const statusCode = await databases.deleteDocument(
       appwriteConfig.databaseId,
-      appwriteConfig.postCollectionId,
+      appwriteConfig.savesCollectionId,
       savedRecordId
     );
     if (!statusCode) throw Error;
