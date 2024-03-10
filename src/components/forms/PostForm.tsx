@@ -155,6 +155,7 @@ const PostForm = ({ post, action }: PostFormProps) => {
             disabled={isLoadingCreate || isLoadingUpdate}
           >
             {isLoadingCreate || (isLoadingUpdate && "Loading ...")}
+            {action} Post
           </Button>
         </div>
       </form>
