@@ -10,8 +10,9 @@ import {
   savePost,
   signInAccount,
   signOutAccount,
+  updatePost,
 } from "../appwirte/api";
-import { INewPost, INewUser } from "../types";
+import { INewPost, INewUser, IUpdatePost } from "../types";
 import { QUERY_KEYS } from "./QueryKeys";
 
 export const useCreateUserAccount = () => {
@@ -127,5 +128,18 @@ export const useGetPostById = (postId: string) => {
     queryKey: [QUERY_KEYS.GET_POST_BY_ID, postId],
     queryFn: () => getPostById(postId),
     enabled: !!postId,
+  });
+};
+
+export const useUpdatePost = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (post: IUpdatePost) => updatePost(post),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_POST_BY_ID, data?.$id],
+      });
+    },
   });
 };
