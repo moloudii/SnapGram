@@ -9,7 +9,6 @@ import {
   Home,
   PostDetails,
   Profile,
-  Saved,
   UpdateProfile,
 } from "./_root/pages";
 import SignupForm from "./_auth/forms/SignupForm";
